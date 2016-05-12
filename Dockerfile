@@ -13,7 +13,6 @@ RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sou
 
 RUN apt-get update -y
 RUN apt-get install -y -q \
-  supervisor \
   firefox \
   git \
   google-chrome-stable \
@@ -35,9 +34,6 @@ RUN mkdir -p /usr/share/desktop-directories
 
 RUN mkdir -p /var/run/sshd
 
-COPY ./configs/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY ./configs/sshd_config /etc/ssh/sshd_config
-
 RUN npm install -g selenium-standalone
 
 # Needed for build (should be second Dockerfile)
@@ -58,4 +54,4 @@ RUN php -r "readfile('https://getcomposer.org/installer');" | php
 RUN mv composer.phar /usr/local/bin/composer
 
 EXPOSE 22 4444 5900
-ENTRYPOINT ["/usr/bin/supervisord"]
+CMD ["/usr/sbin/sshd", "-D"]
